@@ -1,14 +1,10 @@
-import { Alert, Pressable, StyleSheet, Text } from "react-native";
-import theme from "../theme";
+import { Alert, Pressable, StyleSheet } from "react-native";
+import Text from "./Text";
 
 const styles = StyleSheet.create({
   pressableTab: {
     flexGrow: 0,
     padding: 15,
-  },
-  text: {
-    color: theme.colors.appBarTab,
-    fontWeight: 'bold'
   }
 })
 
@@ -18,8 +14,15 @@ const AppBarTab = (props) => {
   }
 
   return (
-    <Pressable style={styles.pressableTab} onPress={onPress}>
-      <Text style={styles.text}>{props.children}</Text>
+    <Pressable 
+      style={styles.pressableTab} 
+      onPress={onPress}>
+      <Text 
+        color="appBarTab" 
+        fontWeight="bold" 
+        fontSize="subheading">
+          {props.children}
+      </Text>
     </Pressable>
   )
 }

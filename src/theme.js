@@ -4,7 +4,9 @@ const theme = {
     textSecondary: '#586069',
     primary: '#0366d6',
     appBarBackground: '#24292e',
-    appBarTab: '#ffffff'
+    appBarTabForeground: '#ffffff',
+    mainBackground: '#e1e3e8',
+    repositoryItemBackground: '#ffffff'
   },
   fontSizes: {
     body: 14,
@@ -17,6 +19,7 @@ const theme = {
     normal: '400',
     bold: '700',
   },
+  borderRadius: 6
 };
 
 export default theme;
