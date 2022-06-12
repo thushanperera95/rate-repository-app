@@ -1,4 +1,5 @@
-import { Alert, Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
+import { Link } from "react-router-native";
 import Text from "./Text";
 
 const styles = StyleSheet.create({
@@ -9,20 +10,17 @@ const styles = StyleSheet.create({
 })
 
 const AppBarTab = (props) => {
-  const onPress = () => {
-    Alert.alert(`You've pressed the ${props.children} tab!`)
-  }
-
   return (
     <Pressable 
-      style={styles.pressableTab} 
-      onPress={onPress}>
-      <Text 
-        color="appBarTab" 
-        fontWeight="bold" 
-        fontSize="subheading">
-          {props.children}
-      </Text>
+      style={styles.pressableTab}>
+        <Link to={props.target}>
+          <Text 
+            color="appBarTab" 
+            fontWeight="bold" 
+            fontSize="subheading">
+              {props.children}
+          </Text>
+        </Link>
     </Pressable>
   )
 }
