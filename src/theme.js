@@ -6,7 +6,10 @@ const theme = {
     appBarBackground: '#24292e',
     appBarTabForeground: '#ffffff',
     mainBackground: '#e1e3e8',
-    repositoryItemBackground: '#ffffff'
+    repositoryItemBackground: '#ffffff',
+    textInputBackground: '#ffffff',
+    textInputBorderAccent: '#c0c0c0',
+    textInputAccent: '#c3c3c3'
   },
   fontSizes: {
     body: 14,
@@ -19,7 +22,7 @@ const theme = {
     normal: '400',
     bold: '700',
   },
-  borderRadius: 6
+  borderRadius: 4
 };
 
 export default theme;
