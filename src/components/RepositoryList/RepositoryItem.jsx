@@ -1,8 +1,8 @@
 import { Image, StyleSheet, View } from "react-native"
-import theme from "../theme"
-import BoldText from "./BoldText"
-import Number from "./Number"
-import Text from "./Text"
+import theme from "../../theme"
+import BoldText from "../BoldText"
+import Number from "../Number"
+import Text from "../Text"
 
 const headerStyle = StyleSheet.create({
   container: {
