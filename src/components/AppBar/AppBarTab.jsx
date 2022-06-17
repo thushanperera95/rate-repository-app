@@ -10,10 +10,18 @@ const styles = StyleSheet.create({
 })
 
 const AppBarTab = (props) => {
+  const onLinkClick = () => {
+    if (props.handler) {
+      props.handler()
+    }
+  }
+
   return (
     <Pressable 
       style={styles.pressableTab}>
-        <Link to={props.target}>
+        <Link 
+          to={props.target}
+          onPress={onLinkClick}>
           <Text 
             color="appBarTab" 
             fontWeight="bold" 
