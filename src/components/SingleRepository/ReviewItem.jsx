@@ -12,7 +12,7 @@ const headerStyle = StyleSheet.create({
     flexGrow: 1
   },
   ratingContainer: {
-    flexGrow: 1,
+    flexGrow: 0,
     paddingRight: 15,
   },
   rating: {
@@ -35,7 +35,7 @@ const headerStyle = StyleSheet.create({
     color: theme.colors.textAccentDark
   },
   reviewText: {
-    paddingTop: 5
+    paddingTop: 5,
   }
 })
 
