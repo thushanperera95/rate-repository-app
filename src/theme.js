@@ -12,7 +12,8 @@ const theme = {
     textInputBackground: '#ffffff',
     textInputBorderAccent: '#c0c0c0',
     textInputError: '#d73a4a',
-    textInputAccent: '#c3c3c3'
+    textInputAccent: '#c3c3c3',
+    textAccentDark: '#565656'
   },
   fontSizes: {
     body: 14,

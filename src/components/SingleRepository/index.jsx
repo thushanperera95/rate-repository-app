@@ -1,34 +1,37 @@
-import { useQuery } from "@apollo/client/react"
+import { FlatList } from "react-native"
 import { useParams } from "react-router"
-import { GET_REPOSITORY } from "../../graphql/queries"
-import RepositoryItem from "../RepositoryList/RepositoryItem"
+
+import useRepository from "../../hooks/useRepository"
+import ItemSeparator from "../ItemSeperator"
 import Spinner from "../Spinner"
+import RepositoryInfo from "./RepositoryInfo"
+import ReviewItem from "./ReviewItem"
 
 const SingleRepository = () => {
   const { id } = useParams()
+  const { repository, loading } = useRepository(id)
 
-  const { data, error, loading } = useQuery(GET_REPOSITORY, {
-    variables: {id},
-    fetchPolicy: 'cache-and-network'
-  })
-
-  if (!data && loading) {
+  if (loading) {
     return <Spinner />
   }
 
-  if (error) {
-    throw new Error(error.message)
-  }
+  const reviews = repository?.reviews 
+    ? repository.reviews.edges.map(edge => edge.node) 
+    : [];
 
   return (
-    <>
-      {data && !loading && 
-        <RepositoryItem 
-          item={data.repository} 
-          shouldDisplayRepositoryButton={true} 
-        />
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ItemSeparatorComponent={ItemSeparator}
+      ListHeaderComponent={() => 
+        <>
+          <RepositoryInfo repository={repository} />
+          <ItemSeparator />
+        </>
       }
-    </>
+    />
   )
 }
 
