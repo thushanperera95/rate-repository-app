@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native"
+import { Image, Linking, Pressable, StyleSheet, View } from "react-native"
 import theme from "../../theme"
 import BoldText from "../BoldText"
 import Number from "../Number"
@@ -20,10 +20,11 @@ const headerStyle = StyleSheet.create({
   },
   infoContainer: {
     flexGrow: 1,
+    flexShrink: 1,
     flexDirection: "column",
   },
   description: {
-    paddingTop: 10
+    paddingTop: 10,
   },
   languageContainer: {
     flexDirection: "row",
@@ -59,7 +60,7 @@ const Header = ({fullName, description, avatarUrl, language}) => {
   )
 }
 
-const footerStyle = StyleSheet.create({
+const bodyStyle = StyleSheet.create({
   container: {
     flexDirection: "row",
     flexGrow: 1,
@@ -67,35 +68,62 @@ const footerStyle = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'column',
-    alignItems: "center"
+    alignItems: "center",
   }
 })
 
-const FooterItem = ({label, value}) => {
+const BodyItem = ({label, value}) => {
   return (
-    <View style={footerStyle.itemContainer}>
+    <View style={bodyStyle.itemContainer}>
       <Number fontWeight="bold">{value}</Number>
       <Text>{label}</Text>
     </View>
   )
 }
 
-const Footer = ({stars, forks, reviews, rating}) => {
+const Body = ({stars, forks, reviews, rating}) => {
   return (
-    <View style={footerStyle.container}>
-      <FooterItem 
+    <View style={bodyStyle.container}>
+      <BodyItem 
         label="Stars" 
         value={stars} />
-      <FooterItem 
+      <BodyItem 
         label="Forks" 
         value={forks} />
-      <FooterItem 
+      <BodyItem 
         label="Reviews" 
         value={reviews} />
-      <FooterItem 
+      <BodyItem 
         label="Rating" 
         value={rating} />
     </View>
+  )
+}
+
+const footerStyle = StyleSheet.create({
+  button: {
+    marginTop: 15,
+    height: 50,
+    borderRadius: theme.borderRadius,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: theme.colors.appBarTabForeground,
+    textAlign: 'center',
+    fontWeight: theme.fontWeights.bold
+  }
+})
+
+const Footer = ({githubUrl}) => {
+  const onSubmit = () => {
+    Linking.openURL(githubUrl)
+  }
+
+  return (
+    <Pressable style={footerStyle.button} onPress={onSubmit}>
+        <Text style={footerStyle.buttonText}>Open in GitHub</Text>
+    </Pressable>
   )
 }
 
@@ -108,20 +136,25 @@ const repositoryItemStyles = StyleSheet.create({
   }
 })
 
-const RepositoryItem = ({item}) => {
+const RepositoryItem = ({item, shouldDisplayRepositoryButton}) => {
   return (
-    <View style={repositoryItemStyles.container}>
+    <View testID='repositoryItem' style={repositoryItemStyles.container}>
       <Header 
         fullName={item.fullName} 
         description={item.description} 
         avatarUrl={item.ownerAvatarUrl}
         language={item.language} />
-      <Footer
+      <Body
         stars={item.stargazersCount}
         forks={item.forksCount}
         reviews={item.reviewCount}
         rating={item.ratingAverage}
       />
+      {shouldDisplayRepositoryButton &&
+        <Footer
+          githubUrl={item.url}
+        />
+      }
     </View>
   )
 }
