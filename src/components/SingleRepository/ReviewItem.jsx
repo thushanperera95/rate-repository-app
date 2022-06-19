@@ -47,7 +47,7 @@ const Header = ({ username, createdAt, rating, reviewText }) => {
       </View>
       <View style={headerStyle.infoContainer}>
         <BoldText fontSize="subheading">{username}</BoldText>
-        <Text style={headerStyle.createdAt}>{format(parseISO(createdAt), 'dd.mm.yyyy')}</Text>
+        <Text style={headerStyle.createdAt}>{format(parseISO(createdAt), 'dd.MM.yyyy')}</Text>
         <Text style={headerStyle.reviewText}>{reviewText}</Text>
       </View>
     </View>

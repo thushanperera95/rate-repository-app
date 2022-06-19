@@ -31,6 +31,7 @@ const AppBar = () => {
         <AppBarTab target="/">Repositories</AppBarTab>
         {response.data?.me && <AppBarTab target="/createreview">Create a review</AppBarTab>}
         {!response.data?.me && <AppBarTab target="/signin">Sign in</AppBarTab>}
+        {!response.data?.me && <AppBarTab target="/signup">Sign up</AppBarTab>}
         {response.data?.me && <AppBarTab target="/" handler={signOut}>Sign out</AppBarTab>}
       </ScrollView>
     </View>
