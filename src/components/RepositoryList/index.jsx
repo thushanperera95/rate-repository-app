@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import useRepositories from '../../hooks/useRepositories';
 import Spinner from '../Spinner';
 import RepositoryListContainer from './RepositoryListContainer';
 
 const RepositoryList = () => {
-  const { repositories, loading } = useRepositories();
+  const [sort, setSort] = useState("latest")
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const { repositories, loading } = useRepositories(sort, searchKeyword);
   const navigate = useNavigate();
 
   const onSingleRepositoryPress = (id) => {
@@ -15,7 +18,15 @@ const RepositoryList = () => {
     return <Spinner />
   }
 
-  return <RepositoryListContainer repositories={repositories} onSingleRepositoryPress={onSingleRepositoryPress} />
+  return (
+    <RepositoryListContainer 
+      repositories={repositories} 
+      onSingleRepositoryPress={onSingleRepositoryPress}
+      sort={sort}
+      setSort={setSort} 
+      setSearchKeyword={setSearchKeyword}
+    />
+  )
 };
 
 export default RepositoryList;

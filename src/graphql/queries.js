@@ -3,8 +3,8 @@ import { CORE_REPOSITORY_FIELDS, CORE_REVIEW_FIELDS, CORE_USER_FIELDS } from "./
 
 export const GET_REPOSITORIES = gql`
   ${CORE_REPOSITORY_FIELDS}
-  query {
-    repositories {
+  query Repositories($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection, $searchKeyword: String) {
+    repositories(orderBy: $orderBy, orderDirection: $orderDirection, searchKeyword: $searchKeyword) {
       edges {
         node {
           ...CoreRepositoryFields
