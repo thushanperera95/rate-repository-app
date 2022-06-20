@@ -1,8 +1,10 @@
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import React from 'react'
 
 import ItemSeparator from '../ItemSeperator';
 import RepositoryItem from './RepositoryItem';
+import { Searchbar } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,10 +12,15 @@ const styles = StyleSheet.create({
   }
 })
 
-const Header = ({ sort, setSort, setSearchKeyword }) => {
+const Header = ({ sort, setSort, searchKeyword, setSearchKeyword }) => {
   return (
     <View style={styles.container}>
       <ItemSeparator />
+      <Searchbar
+        placeholder='Search'
+        onChangeText={query => setSearchKeyword(query)}
+        value={searchKeyword}
+      />
       <Picker
         selectedValue={sort}
         onValueChange={(value) => setSort(value)}
@@ -26,30 +33,47 @@ const Header = ({ sort, setSort, setSearchKeyword }) => {
   )
 }
 
-const RepositoryListContainer = ({ repositories, onSingleRepositoryPress, sort, setSort, setSearchKeyword }) => {
-  const repositoryNodes = repositories 
-    ? repositories.edges.map(edge => edge.node) 
-    : [];
+export class RepositoryListContainer extends React.Component {
+  keyExtractor = (item) => item.id
 
-  const renderItem = ({item}) => (
-    <Pressable onPress={() => onSingleRepositoryPress(item.id)}>
-      <RepositoryItem
-        style={{zIndex: 5}} 
-        item={item} 
-        shouldDisplayRepositoryButton={false} 
+  renderHeader = () => {
+    const props = this.props
+
+    return (
+      <Header 
+        sort={props.sort} 
+        setSort={props.setSort} 
+        searchKeyword={props.searchKeyword} 
+        setSearchKeyword={props.setSearchKeyword} />
+    )
+  }
+
+  renderItem = ({item}) => {
+    return (
+      <Pressable onPress={() => this.props.onSingleRepositoryPress(item.id)}>
+        <RepositoryItem
+          item={item} 
+          shouldDisplayRepositoryButton={false} 
+        />
+      </Pressable>
+    )
+  }
+
+  render() {
+    const repositoryNodes = this.props.repositories 
+      ? this.props.repositories.edges.map(edge => edge.node) 
+      : [];
+
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        keyExtractor={this.keyExtractor}
+        ListHeaderComponent={this.renderHeader}
+        renderItem={this.renderItem}
       />
-    </Pressable>
-  )
-
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={<Header sort={sort} setSort={setSort} setSearchKeyword={setSearchKeyword} />}
-      renderItem={renderItem}
-      // other props
-    />
-  );
-};
+    );
+  }
+}
 
 export default RepositoryListContainer;

@@ -24,6 +24,7 @@ const RepositoryList = () => {
       onSingleRepositoryPress={onSingleRepositoryPress}
       sort={sort}
       setSort={setSort} 
+      searchKeyword={searchKeyword}
       setSearchKeyword={setSearchKeyword}
     />
   )
