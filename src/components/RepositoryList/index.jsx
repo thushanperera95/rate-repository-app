@@ -7,11 +7,15 @@ import RepositoryListContainer from './RepositoryListContainer';
 const RepositoryList = () => {
   const [sort, setSort] = useState("latest")
   const [searchKeyword, setSearchKeyword] = useState('')
-  const { repositories, loading } = useRepositories(sort, searchKeyword);
+  const { repositories, loading, fetchMore } = useRepositories(sort, searchKeyword, 8);
   const navigate = useNavigate();
 
   const onSingleRepositoryPress = (id) => {
     navigate(`/${id}`)
+  }
+
+  const onEndReach = () => {
+    fetchMore()
   }
 
   if (loading) {
@@ -20,6 +24,7 @@ const RepositoryList = () => {
 
   return (
     <RepositoryListContainer 
+      onEndReach={onEndReach}
       repositories={repositories} 
       onSingleRepositoryPress={onSingleRepositoryPress}
       sort={sort}

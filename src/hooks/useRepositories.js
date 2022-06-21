@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { useQuery } from "@apollo/client/react"
 
 import { GET_REPOSITORIES } from "../graphql/queries"
@@ -26,32 +25,45 @@ const determineSortParameters = (sort) => {
   return [orderBy, orderDirection]
 }
 
-const useRepositories = (sort, searchKeyword) => {
-  const [repositories, setRepositories] = useState()
-  const [loading, setLoading] = useState(false)
-
+const useRepositories = (sort, searchKeyword, first) => {
   const [searchKeywordDebounced] = useDebounce(searchKeyword, 500);
   const [orderBy, orderDirection] = determineSortParameters(sort);
 
-  const { data, error, queryLoading, refetch } = useQuery(GET_REPOSITORIES, {
+  const variables = { 
+    orderBy, 
+    orderDirection, 
+    searchKeyword: searchKeywordDebounced,
+    first
+  }
+  const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network',
-    variables: { orderBy: orderBy, orderDirection: orderDirection, searchKeyword: searchKeywordDebounced }
+    variables,
   })
 
-  useEffect(() => {
-    if (error) {
-      throw new Error(error.message)
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
     }
 
-    if (queryLoading || !data) {
-      setLoading(true)
-    } else {
-      setLoading(false)
-      setRepositories(data.repositories)
-    }
-  }, [queryLoading, data, error])
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        orderBy: orderBy, 
+        orderDirection: orderDirection, 
+        searchKeyword: searchKeywordDebounced,
+        first: first
+      }
+    })
+  }
 
-  return {repositories, loading, refetch: refetch}
+  return {
+    repositories: data?.repositories, 
+    loading, 
+    fetchMore: handleFetchMore,
+    ...result
+  }
 }
 
 export default useRepositories
