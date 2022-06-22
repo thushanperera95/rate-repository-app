@@ -21,10 +21,28 @@ export const GET_REPOSITORIES = gql`
 `
 
 export const ME = gql`
-  query {
+  ${CORE_REVIEW_FIELDS}
+  ${CORE_USER_FIELDS}
+  query getCurrentUser($includeReviews: Boolean = false) {
     me {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            ...CoreReviewFields
+            user {
+              ...CoreUserFields
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
+        }
+      }
     }
   }
 `
