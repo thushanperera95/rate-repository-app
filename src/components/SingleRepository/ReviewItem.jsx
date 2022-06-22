@@ -1,10 +1,13 @@
-import { StyleSheet, View } from "react-native"
+import { Alert, Pressable, StyleSheet, View } from "react-native"
 import format from 'date-fns/format'
 import parseISO from 'date-fns/parseISO'
 
 import theme from "../../theme"
 import BoldText from "../BoldText"
 import Text from "../Text"
+import ItemSeparator from "../ItemSeperator"
+import HorizontalItemSeparator from "../HorizontalItemSeperator"
+import { useNavigate } from "react-router"
 
 const headerStyle = StyleSheet.create({
   container: {
@@ -54,6 +57,71 @@ const Header = ({ username, createdAt, rating, reviewText }) => {
   )
 }
 
+const actionStyle = StyleSheet.create({
+  actionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  viewButton: {
+    height: 50,
+    borderRadius: theme.borderRadius,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  deleteButton: {
+    backgroundColor: theme.colors.negativeBackground
+  },
+  buttonText: {
+    color: theme.colors.appBarTabForeground,
+    textAlign: 'center',
+    fontWeight: theme.fontWeights.bold
+  }
+})
+
+const Actions = ({ review, onReviewDelete }) => {
+  const navigate = useNavigate();
+
+  const onViewRepositoryClick = () => {
+    navigate(`/${review.repositoryId}`)
+  }
+
+  const onDeleteReviewClick = () => {
+    Alert.alert(
+      'Delete review',
+      'Are you sure you want to delete this review?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'DELETE',
+          onPress: () => onReviewDelete(review.id)
+        }
+      ]
+    )
+  }
+
+  return (
+    <View style={actionStyle.actionContainer}>
+      <Pressable 
+        style={actionStyle.viewButton} 
+        onPress={onViewRepositoryClick}
+      >
+        <Text style={actionStyle.buttonText}>View Repository</Text>
+      </Pressable>
+      <HorizontalItemSeparator />
+      <Pressable 
+        style={[actionStyle.viewButton, actionStyle.deleteButton]} 
+        onPress={onDeleteReviewClick}
+      >
+        <Text style={actionStyle.buttonText}>Delete review</Text>
+      </Pressable>
+    </View>
+  )
+}
+
 const reviewItemStyle = StyleSheet.create({
   container: {
     alignItems: 'stretch',
@@ -63,7 +131,7 @@ const reviewItemStyle = StyleSheet.create({
   }
 })
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, onReviewDelete, includeActions = false }) => {
   return (
     <View style={reviewItemStyle.container}>
       <Header 
@@ -72,6 +140,10 @@ const ReviewItem = ({ review }) => {
         rating={review.rating}
         reviewText={review.text}
       />
+      {includeActions && <>
+        <ItemSeparator />
+        <Actions review={review} onReviewDelete={onReviewDelete} />
+      </>}
     </View>
   )
 }
